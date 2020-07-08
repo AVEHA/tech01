@@ -17,7 +17,7 @@ namespace DapperMVC.Models
             List<Manufacturer> manufacturers = new List<Manufacturer>();
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                manufacturers = db.Query<Manufacturer>("SELECT * FROM Manufacturers").ToList();
+                manufacturers = db.Query<Manufacturer>("SELECT * FROM Manufacturer").ToList();
             }
             return manufacturers;
         }
@@ -27,7 +27,7 @@ namespace DapperMVC.Models
             Manufacturer manufacturer = null;
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                manufacturer = db.Query<Manufacturer>("SELECT * FROM Manufacturers WHERE Id = @id", new { id }).FirstOrDefault();
+                manufacturer = db.Query<Manufacturer>("SELECT * FROM Manufacturer WHERE Id = @id", new { id }).FirstOrDefault();
             }
             return manufacturer;
         }
@@ -36,9 +36,11 @@ namespace DapperMVC.Models
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "INSERT INTO Manudacturers (Name, Description) VALUES(@Name, @Description); SELECT CAST(SCOPE_IDENTITY() as int)";
-                int? manufacturerId = db.Query<int>(sqlQuery, manufacturer).FirstOrDefault();
-                manufacturer.Id = manufacturerId;
+                var sqlQuery = "INSERT INTO Manufacturers (Name, Description) VALUES (@Name, @Description)";
+                db.Execute(sqlQuery, manufacturer);
+                //var sqlQuery = "INSERT INTO Manufacturers (Name, Description) VALUES(@Name, @Description); SELECT CAST(SCOPE_IDENTITY() as int)";
+                //int? manufacturerId = db.Query<int>(sqlQuery, manufacturer).FirstOrDefault();
+                //manufacturer.Id = manufacturerId.Value;
             }
             return manufacturer;
         }
@@ -47,7 +49,7 @@ namespace DapperMVC.Models
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "UPDATE Manufacturers SET Name = @Name, Description = @Description WHERE Id = @Id";
+                var sqlQuery = "UPDATE Manufacturer SET Name = @Name, Description = @Description WHERE Id = @Id";
                 db.Execute(sqlQuery, manufacturer);
             }
         }
@@ -56,7 +58,7 @@ namespace DapperMVC.Models
         {
             using (IDbConnection db = new SqlConnection(connectionString))
             {
-                var sqlQuery = "DELETE FROM Manufacturers WHERE Id = @Id";
+                var sqlQuery = "DELETE FROM Manufacturer WHERE Id = @Id";
                 db.Execute(sqlQuery, new { id });
             }
         }
